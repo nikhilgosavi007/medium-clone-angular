@@ -43,3 +43,39 @@ export const redirectAfterRegisterEffect = createEffect(
   },
   {functional: true, dispatch: false}
 )
+
+export const loginEffect = createEffect(
+  (
+    action$ = inject(Actions),
+    authService = inject(AuthService),
+    persistenceService = inject(PersistenceService)
+  ) => {
+    return action$.pipe(
+      ofType(authActions.login),
+      switchMap((login) => {
+        return authService.login(login.request).pipe(map((currentUser: CurrentUserInterface) => {
+            persistenceService.set('accessToken', currentUser.token)
+            return authActions.loginSuccess({currentUser})
+          }),
+          catchError((errResponse: HttpErrorResponse) => {
+            return of(authActions.loginFailure({errors: errResponse.error.errors}))
+          })
+        )
+      })
+    )
+  }, {functional: true})
+
+export const redirectAfterLoginEffect = createEffect(
+  (
+    actions$ = inject(Actions),
+    router = inject(Router)
+  ) => {
+    return actions$.pipe(
+      ofType(authActions.loginSuccess),
+      tap(() => {
+        router.navigateByUrl('/').catch(e => console.log('Error navigating to "/"'))
+      })
+    )
+  },
+  {functional: true, dispatch: false}
+)
