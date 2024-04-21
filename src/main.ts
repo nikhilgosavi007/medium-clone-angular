@@ -6,26 +6,30 @@ import {provideState, provideStore} from '@ngrx/store'
 import {authFeatureKey, authReducer} from './app/auth/store/reducers'
 import {provideStoreDevtools} from '@ngrx/store-devtools'
 import {isDevMode} from '@angular/core'
-import {provideHttpClient} from '@angular/common/http';
-import { provideEffects } from '@ngrx/effects'
+import {provideHttpClient} from '@angular/common/http'
+import {provideEffects} from '@ngrx/effects'
 import * as authEffects from './app/auth/store/effects'
+import {provideRouterStore, routerReducer} from '@ngrx/router-store'
 
 bootstrapApplication(AppComponent, {
   providers: [
     provideHttpClient(),
     provideRouter(appRoutes),
-    provideStore(),
+    provideStore({
+      router: routerReducer
+    }),
+    provideRouterStore(),
     provideState(authFeatureKey, authReducer),
     provideEffects(authEffects),
     provideStoreDevtools({
-        maxAge: 25,
-        logOnly: !isDevMode(),
-        autoPause: true,
-        trace: false,
-        traceLimit: 75,
+      maxAge: 25,
+      logOnly: !isDevMode(),
+      autoPause: true,
+      trace: false,
+      traceLimit: 75
     }),
     provideEffects()
-],
+  ]
 }).then(r => {
-  console.log("bootstrap app")
+  console.log('bootstrap app')
 })
