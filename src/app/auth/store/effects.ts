@@ -79,3 +79,23 @@ export const redirectAfterLoginEffect = createEffect(
   },
   {functional: true, dispatch: false}
 )
+
+export const getCurrentUserEffect = createEffect(
+  (
+    action$ = inject(Actions),
+    authService = inject(AuthService),
+    persistenceService = inject(PersistenceService)
+  ) => {
+    return action$.pipe(
+      ofType(authActions.getCurrentUser),
+      switchMap(() => {
+        return authService.getCurrentUser().pipe(map((currentUser: CurrentUserInterface) => {
+            return authActions.getCurrentUserSuccess({currentUser})
+          }),
+          catchError((errResponse: HttpErrorResponse) => {
+            return of(authActions.getCurrentUserFailure())
+          })
+        )
+      })
+    )
+  }, {functional: true})
