@@ -7,15 +7,14 @@ import {CommonModule} from '@angular/common'
 import {RouterLink} from '@angular/router'
 import {selectIsSubmitting, selectValidationErrors} from '../../store/reducers'
 import {AuthStateInterface} from '../../types/authState.interface'
-import {AuthService} from '../../services/auth.service'
 import {RegisterRequestInterface} from '../../types/registerRequest.interface'
 import {combineLatest} from 'rxjs'
 import {BackendErrorMessagesComponent} from '../../../shared/components/backend-error-messages/backend-error-messages.component'
 
 @Component({
-  selector: 'nk-register',
-  templateUrl: './register.component.html',
-  styleUrl: './register.component.scss',
+  selector: 'nk-login',
+  templateUrl: './login.component.html',
+  styleUrl: './login.component.scss',
   standalone: true,
   imports: [
     ReactiveFormsModule,
@@ -24,7 +23,7 @@ import {BackendErrorMessagesComponent} from '../../../shared/components/backend-
     BackendErrorMessagesComponent
   ]
 })
-export class RegisterComponent implements OnInit {
+export class LoginComponent implements OnInit {
   form!: FormGroup
 
   storeData$ = combineLatest({
@@ -41,7 +40,6 @@ export class RegisterComponent implements OnInit {
 
   initializeForm(): void {
     this.form = this.fb.nonNullable.group({
-      username: ['', Validators.required],
       email: ['', Validators.required],
       password: ['', Validators.required]
     })
@@ -52,10 +50,6 @@ export class RegisterComponent implements OnInit {
     const request: RegisterRequestInterface = {
       user: this.form.getRawValue()
     }
-    //this.store.dispatch(registerAction({request: {user: this.form.value}}))
-    this.store.dispatch(authActions.register({request}))
-    //this.authService.register(request).subscribe(res => console.log(res))
-
-
+    this.store.dispatch(authActions.login({request}))
   }
 }
