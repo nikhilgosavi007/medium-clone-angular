@@ -5,10 +5,12 @@ import {Store} from '@ngrx/store'
 import {authActions} from '../../store/actions'
 import {CommonModule} from '@angular/common'
 import {RouterLink} from '@angular/router'
-import {selectIsSubmitting} from '../../store/reducers'
+import {selectIsSubmitting, selectValidationErrors} from '../../store/reducers'
 import {AuthStateInterface} from '../../types/authState.interface'
 import {AuthService} from '../../services/auth.service'
 import {RegisterRequestInterface} from '../../types/registerRequest.interface'
+import {combineLatest} from 'rxjs'
+import {BackendErrorMessagesComponent} from '../../../shared/components/backend-error-messages/backend-error-messages.component'
 
 @Component({
   selector: 'nk-register',
@@ -18,12 +20,17 @@ import {RegisterRequestInterface} from '../../types/registerRequest.interface'
   imports: [
     ReactiveFormsModule,
     RouterLink,
-    CommonModule
+    CommonModule,
+    BackendErrorMessagesComponent
   ]
 })
 export class RegisterComponent implements OnInit {
   form!: FormGroup
-  isSubmitting$ = this.store.select(selectIsSubmitting)
+
+  storeData$ = combineLatest({
+    isSubmitting: this.store.select(selectIsSubmitting),
+    backendErrors: this.store.select(selectValidationErrors)
+  })
 
   constructor(private fb: FormBuilder, private store: Store<{auth: AuthStateInterface}>, private authService: AuthService) {
   }
