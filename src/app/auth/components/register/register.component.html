@@ -7,7 +7,6 @@
           <p class="text-xs-center">
             <a [routerLink]="['/login']">Have an account?</a>
           </p>
-          Backend errors are here
           <nk-backend-error-messages
             *ngIf='storeData.backendErrors'
             [backendErrors]='storeData.backendErrors'
