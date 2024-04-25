@@ -89,6 +89,10 @@ export const getCurrentUserEffect = createEffect(
     return action$.pipe(
       ofType(authActions.getCurrentUser),
       switchMap(() => {
+        const token = persistenceService.get('accessToken')
+        if (!token) {
+          return of(authActions.getCurrentUserFailure())
+        }
         return authService.getCurrentUser().pipe(map((currentUser: CurrentUserInterface) => {
             return authActions.getCurrentUserSuccess({currentUser})
           }),
