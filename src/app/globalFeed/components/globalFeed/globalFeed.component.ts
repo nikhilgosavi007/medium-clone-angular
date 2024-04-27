@@ -8,6 +8,7 @@ import {FeedComponent} from '../../../shared/components/feed/feed.component'
   imports: [FeedComponent]
 })
 export class GlobalFeedComponent implements OnInit {
+  apiUrl = '/articles'
   constructor() {
   }
 
