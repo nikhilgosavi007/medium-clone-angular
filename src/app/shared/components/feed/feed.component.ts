@@ -7,12 +7,13 @@ import {FeedStateInterface} from './types/feedState.interface'
 import {CommonModule} from '@angular/common'
 import {RouterLink} from '@angular/router'
 import {ErrorMessageComponent} from '../errorMessage/error-message.component'
+import {LoadingComponent} from '../loading/loading.component'
 
 @Component({
   selector: 'nk-feed',
   templateUrl: './feed.component.html',
   standalone: true,
-  imports: [CommonModule, RouterLink, ErrorMessageComponent]
+  imports: [CommonModule, RouterLink, ErrorMessageComponent, LoadingComponent]
 })
 export class FeedComponent implements OnInit {
   @Input() apiUrl: string = ''

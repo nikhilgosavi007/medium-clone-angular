@@ -1,5 +1,5 @@
 <ng-container *ngIf='storeData$ | async as data'>
-  <div *ngIf='data.isLoading'>Loading...</div>
+  <nk-loading *ngIf='data.isLoading'></nk-loading>
   <nk-error-message *ngIf='data.error' [message]='data.error'></nk-error-message>
 
   <div *ngIf='data.feed'>
